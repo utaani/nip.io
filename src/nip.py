@@ -63,6 +63,7 @@ class DynamicBackend:
         self.ttl = ''
         self.name_servers = {}
         self.additional_cnames = {}
+        self.additional_TXT = {}
 
     def configure(self):
         fname = os.path.join(os.path.dirname(os.path.realpath(__file__)), 'backend.conf')
@@ -95,6 +96,11 @@ class DynamicBackend:
                 name = entry[0]
             self.additional_cnames[name] = entry[1]
             log('add static CNAME: %s = %s' % (entry[0], entry[1]))
+            
+        for entry in config.items('additional_txt') or []:
+            name = entry[0]
+            self.additional_txt[name] = entry[1]
+            log('add static TXT: %s = %s' % (entry[0], entry[1]))
 
         log('Name servers: %s' % self.name_servers)
         log('ID: %s' % self.id)
@@ -125,13 +131,15 @@ class DynamicBackend:
             qname = cmd[1].lower()
             qtype = cmd[3]
 
-            if qtype in ('CNAME', 'A', 'ANY') and qname.endswith(self.domain):
+            if qtype in ('TXT', 'CNAME', 'A', 'ANY') and qname.endswith(self.domain):
                 if qname == self.domain:
                     self.handle_self(self.domain)
                 elif qname in self.name_servers:
                     self.handle_nameservers(qname)
                 elif qname in self.additional_cnames:
                     self.handle_additional_cnames(qname)
+                elif qname in self.additional_txt:
+                    self.handle_additional_txt(qname)
                 else:
                     self.handle_subdomains(qname)
             elif qtype == 'SOA' and qname.endswith(self.domain):
@@ -179,6 +187,13 @@ class DynamicBackend:
             log('Found CNAME: %s' % qname)
         cname=self.additional_cnames[qname]
         write('DATA', qname, 'IN', 'CNAME', self.ttl, self.id, cname)
+        write('END')
+        
+    def handle_additional_txt(self, qname):
+        if DEBUG:
+            log('Found TXT: %s' % qname)
+        cname=self.additional_txt[qname]
+        write('DATA', qname, 'IN', 'TXT', self.ttl, self.id, cname)
         write('END')
 
     def handle_nameservers(self, qname):
