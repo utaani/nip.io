@@ -27,5 +27,6 @@ ns2.example.com=127.0.0.1
 [additional_cnames]
 www=business.example.com
 
+# txt nly one record can be entered for each key.
 [additional_txt]
 _acme-challenge=102245cd71a62b1581a82c976670bc6d49695d38a60524b3615c4581e64d4f9c
