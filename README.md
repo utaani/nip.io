@@ -24,7 +24,7 @@ customer1.app.10.0.0.1.nip.io maps to 10.0.0.1
 
 See https://github.com/resmo/nip.io/blob/master/src/backend.conf.example for an example config-
 
-**Hint**: See the static CNAME `_acme-challenge=xyz.auth.example.com.` in the example, use it with https://github.com/joohoi/acme-dns for free Let's Encrypt TLS certs.
+~~ **Hint**: See the static CNAME `_acme-challenge=xyz.auth.example.com.` in the example, use it with https://github.com/joohoi/acme-dns for free Let's Encrypt TLS certs. ~~ TXT cannot alias, not good for domain validation with wildcard cert. Plase use [additional_txt] sample, but only one record in same key.
 
 ## Install
 
