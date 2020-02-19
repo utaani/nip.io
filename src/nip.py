@@ -98,7 +98,10 @@ class DynamicBackend:
             log('add static CNAME: %s = %s' % (entry[0], entry[1]))
             
         for entry in config.items('additional_txt') or []:
-            name = entry[0]
+            if not entry[0].endswith(self.domain):
+                name = entry[0] + '.' + self.domain
+            else:
+                name = entry[0]
             self.additional_txt[name] = entry[1]
             log('add static TXT: %s = %s' % (entry[0], entry[1]))
 
