@@ -63,7 +63,7 @@ class DynamicBackend:
         self.ttl = ''
         self.name_servers = {}
         self.additional_cnames = {}
-        self.additional_TXT = {}
+        self.additional_txt = {}
 
     def configure(self):
         fname = os.path.join(os.path.dirname(os.path.realpath(__file__)), 'backend.conf')
