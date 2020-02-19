@@ -192,8 +192,8 @@ class DynamicBackend:
     def handle_additional_txt(self, qname):
         if DEBUG:
             log('Found TXT: %s' % qname)
-        cname=self.additional_txt[qname]
-        write('DATA', qname, 'IN', 'TXT', self.ttl, self.id, cname)
+        txt=self.additional_txt[qname]
+        write('DATA', qname, 'IN', 'TXT', self.ttl, self.id, txt)
         write('END')
 
     def handle_nameservers(self, qname):
